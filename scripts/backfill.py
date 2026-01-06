@@ -33,18 +33,19 @@ def backfill_relations():
             # 统一转为 Asia/Shanghai
             date_obj = date_obj.in_timezone("Asia/Shanghai")
             
-            # 3. 检查是否已经有【英文】关联
-            # 如果 Year, Month, Week, All 都有值了，就跳过（节省时间）
-            # 如果你想强制全部刷新，请把下面这几行注释掉
-            has_year = len(properties.get("Year", {}).get("relation", [])) > 0
-            has_month = len(properties.get("Month", {}).get("relation", [])) > 0
-            has_week = len(properties.get("Week", {}).get("relation", [])) > 0
-            has_all = len(properties.get("All", {}).get("relation", [])) > 0
+            # --- 步骤 B: 检查是否需要迁移 ---
+            # 🔴 把下面这几行判断全部注释掉，强制程序运行
+            # has_year = len(properties.get("Year", {}).get("relation", [])) > 0
+            # has_month = len(properties.get("Month", {}).get("relation", [])) > 0
+            # has_week = len(properties.get("Week", {}).get("relation", [])) > 0
+            # has_all = len(properties.get("All", {}).get("relation", [])) > 0
             
-            if has_year and has_month and has_week and has_all:
-                # print(f"   跳过已完成迁移的页面: {date_str}")
-                continue
+            # if has_year and has_month and has_week and has_all:
+            #     skipped += 1
+            #     continue
 
+            # --- 步骤 C: 直接开始计算并更新 ---
+            print(f"🔄 [{index+1}/{len(all_pages)}] 正在强制更新关联: {date_str} ...")
             # 4. 计算关联 ID
             print(f"[{index+1}/{len(all_pages)}] 正在迁移: {date_str} ...")
             relation_ids = {}
