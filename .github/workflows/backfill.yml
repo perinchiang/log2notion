@@ -27,3 +27,7 @@ jobs:
       - name: Run Backfill Script
         run: |
           python -u scripts/backfill.py
+          
+      - name: Run History Word Count
+        run: |
+          python -u scripts/count_history.py
