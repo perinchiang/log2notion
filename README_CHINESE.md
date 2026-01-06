@@ -21,8 +21,6 @@
 * 配合 Notion Formula 2.0，提供了一套**彩虹进度条**和**心情光谱**公式。
 * 自动在月/周/年视图展示：`篇数进度`、`字数汇总`、`心情分布能量条`。
 
-
-
 ---
 
 ## 🛠️ 效果预览 (Preview)
@@ -82,73 +80,6 @@
 
 ---
 
-## 🧠 高级玩法：Notion 公式分享
-
-本项目配套了一套强大的 Notion Formula 2.0 公式，用于在画廊视图中展示进度条和心情。
-
-**月度/年度画廊公式 (Gallery Formula):**
-/* === 第一部分：基础数据 === */
-("📝 篇数： " + prop("Rollup_Entries") + " 篇").style("b", "blue") 
-+ "\n" + 
-("✍️ 字数： " + prop("Rollup_Wordcount") + " 字").style("b", "green") 
-+ "\n" + 
-
-/* === 第二部分：周进度条 (分母改为 7) === */
-let(
-    /* 周满勤按 7 天算 */
-    target, 7,
-    rawProgress, round(prop("Rollup_Entries") / target * 10),
-    
-    let(
-        fillCount, if(rawProgress > 10, 10, rawProgress),
-        emptyCount, if(rawProgress > 10, 0, 10 - rawProgress),
-        
-        ("📅 进度： " + 
-        substring("■■■■■■■■■■", 0, fillCount) + 
-        substring("□□□□□□□□□□", 0, emptyCount) + 
-        " " + format(round(prop("Rollup_Entries") / target * 100)) + "%").style("b", "pink")
-    )
-) 
-+ "\n" + 
-
-/* === 第三部分：心情能量条 (完全复用月度的逻辑) === */
-let(
-    moodList, 
-    prop("Day").map(current.prop("Mood").first().prop("Mood Type").format()),
-
-    let(
-        hCount, moodList.filter(current.contains("Positive")).length(),
-        nCount, moodList.filter(current.contains("Neutral")).length(),
-        sCount, moodList.filter(current.contains("Negative")).length(),
-        total, hCount + nCount + sCount,
-
-        if(total == 0, "😶 本周暂无心情记录".style("i", "gray"),
-            let(
-                hBlock, floor(hCount / total * 10),
-                nBlock, floor(nCount / total * 10),
-                sBlock, 10 - hBlock - nBlock, 
-                
-                ("🌈 心情： " + 
-                substring("■■■■■■■■■■", 0, hBlock).style("green") + 
-                substring("■■■■■■■■■■", 0, nBlock).style("gray") + 
-                substring("■■■■■■■■■■", 0, sBlock).style("red")) 
-                + "\n" +
-                ("😆 " + format(round(hCount / total * 100)) + "%").style("b", "green") + "   " + 
-                ("😐 " + format(round(nCount / total * 100)) + "%").style("b", "gray") + "   " + 
-                ("😫 " + format(round(sCount / total * 100)) + "%").style("b", "red")
-            )
-        )
-    )
-)
-
----
-
 ## 🤝 致谢 (Credits)
 
 本项目修改自 [malinkang/duolingo2notion](https://github.com/malinkang/duolingo2notion)。感谢原作者提供的多邻国爬虫逻辑。
-
----
-
-### 💡 还有什么要补充的吗？
-
-如果你有 Notion 的模板链接（Duplicate Link），也可以贴上去，这样别人“一键复制模板 + Fork 代码”就能跑起来，Star 数绝对蹭蹭涨！祝你的项目大火！🔥
