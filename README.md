@@ -1,5 +1,5 @@
 # 🚀 Notion Life OS: Fully Automated Diary (Auto-Sync)
-[中文]https://github.com/perinchiang/log2notion/blob/main/README_CHINESE.md，[English]https://github.com/perinchiang/log2notion/edit/main/README.md
+[![中文](https://img.shields.io/badge/Language-中文-blue)](https://github.com/perinchiang/log2notion/blob/main/README_CHINESE.md) [![English](https://img.shields.io/badge/Language-English-blue)](https://github.com/perinchiang/log2notion/blob/main/README.md)
 
 **A Fully Automated Life OS Diary System for Notion**
 
