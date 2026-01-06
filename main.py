@@ -1,4 +1,3 @@
-# main.py
 import os
 import sys
 from datetime import datetime
@@ -6,8 +5,7 @@ import pytz
 from NotionHelper import NotionHelper
 
 # 设置时区为 台北/北京时间 (UTC+8)
-# GitHub 默认为 UTC 时间，必须强制转换，否则你会发现“今天”是“昨天”
-tz = pytz.timezone('Asia/Shanghai') 
+tz = pytz.timezone('Asia/Shanghai')
 today = datetime.now(tz)
 
 print(f"开始执行自动化归档，当前时间: {today.strftime('%Y-%m-%d %H:%M:%S')}")
