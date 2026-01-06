@@ -148,6 +148,8 @@ def create_daily_log():
     relation_ids["All"] = helper.get_relation_id("All", helper.all_database_id, "https://www.notion.so/icons/site-selection_gray.svg")
 
     properties = {}
+    properties["Name"] = utils.get_title(today_str)
+    properties["Date"] = utils.get_date(today_str)
     properties["Year"] = utils.get_relation([relation_ids["Year"]])
     properties["Month"] = utils.get_relation([relation_ids["Month"]])
     properties["Week"] = utils.get_relation([relation_ids["Week"]])
