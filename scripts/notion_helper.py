@@ -76,11 +76,11 @@ class NotionHelper:
 
     def write_database_id(self, database_id):
         env_file = os.getenv('GITHUB_ENV')
-        # 将值写入环境文件
-        with open(env_file, "a") as file:
-            file.write(f"DATABASE_ID={database_id}\n")
+        if env_file:
+            with open(env_file, "a") as file:
+                file.write(f"DATABASE_ID={database_id}\n")
+
     def extract_page_id(self, notion_url):
-        # 正则表达式匹配 32 个字符的 Notion page_id
         match = re.search(
             r"([a-f0-9]{32}|[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})",
             notion_url,
@@ -92,10 +92,7 @@ class NotionHelper:
 
     def search_database(self, block_id):
         children = self.client.blocks.children.list(block_id=block_id)["results"]
-        # 遍历子块
         for child in children:
-            # 检查子块的类型
-
             if child["type"] == "child_database":
                 self.database_id_dict[child.get("child_database").get("title")] = (
                     child.get("id")
@@ -107,16 +104,15 @@ class NotionHelper:
                     .startswith("https://heatmap.malinkang.com/")
                 ):
                     self.heatmap_block_id = child.get("id")
-            # 如果子块有子块，递归调用函数
             if "has_children" in child and child["has_children"]:
                 self.search_database(child["id"])
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
     def update_heatmap(self, block_id, url):
-        # 更新 image block 的链接
         return self.client.blocks.update(block_id=block_id, embed={"url": url})
 
     def get_week_relation_id(self, date):
+        # 周数据库：使用 "Date"
         year = date.isocalendar().year
         week = date.isocalendar().week
         week = f"{year}年第{week}周"
@@ -127,22 +123,25 @@ class NotionHelper:
         )
 
     def get_month_relation_id(self, date):
+        # 月数据库：使用 "日期"
         month = date.strftime("%Y年%-m月")
         start, end = get_first_and_last_day_of_month(date)
-        properties = {"Date": get_date(format_date(start), format_date(end))}
+        properties = {"日期": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
             month, self.month_database_id, TARGET_ICON_URL, properties
         )
 
     def get_year_relation_id(self, date):
+        # 年数据库：使用 "日期"
         year = date.strftime("%Y")
         start, end = get_first_and_last_day_of_year(date)
-        properties = {"Date": get_date(format_date(start), format_date(end))}
+        properties = {"日期": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
             year, self.year_database_id, TARGET_ICON_URL, properties
         )
 
     def get_day_relation_id(self, date):
+        # 日数据库：使用 "Date"
         new_date = date.replace(hour=0, minute=0, second=0, microsecond=0)
         day = new_date.strftime("%Y-%m-%d")
         properties = {
@@ -172,11 +171,17 @@ class NotionHelper:
         key = f"{id}{name}"
         if key in self.__cache:
             return self.__cache.get(key)
+        
+        # 修正：所有数据库的标题列统一使用 "Name"
         filter = {"property": "Name", "title": {"equals": name}}
+        
         response = self.client.databases.query(database_id=id, filter=filter)
         if len(response.get("results")) == 0:
             parent = {"database_id": id, "type": "database_id"}
+            
+            # 修正：创建时标题列也使用 "Name"
             properties["Name"] = get_title(name)
+            
             page_id = self.client.pages.create(
                 parent=parent, properties=properties, icon=get_icon(icon)
             ).get("id")
@@ -240,7 +245,6 @@ class NotionHelper:
 
     @retry(stop_max_attempt_number=3, wait_fixed=5000)
     def query_all(self, database_id):
-        """获取database中所有的数据"""
         results = []
         has_more = True
         start_cursor = None
