@@ -10,5 +10,8 @@ TITLE = "title"
 SELECT = "select"
 MULTI_SELECT = "multi_select"
 
-# Icons (用来关联年/月/周时的默认图标，可保持原样)
+# Icons (必须保留，notion_helper.py 需要引用它们)
 TARGET_ICON_URL = "https://www.notion.so/icons/target_red.svg"
+TAG_ICON_URL = "https://www.notion.so/icons/tag_gray.svg"
+USER_ICON_URL = "https://www.notion.so/icons/user-circle-filled_gray.svg"
+BOOKMARK_ICON_URL = "https://www.notion.so/icons/bookmark_gray.svg"
