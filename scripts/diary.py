@@ -142,18 +142,16 @@ def create_daily_log():
 
     # 下面是创建页面的逻辑 (早上运行)
     relation_ids = {}
-    relation_ids["年"] = helper.get_year_relation_id(now)
-    relation_ids["月"] = helper.get_month_relation_id(now)
-    relation_ids["周"] = helper.get_week_relation_id(now)
-    relation_ids["全部"] = helper.get_relation_id("全部", helper.all_database_id, "https://www.notion.so/icons/site-selection_gray.svg")
+    relation_ids["Year"] = helper.get_year_relation_id(now)
+    relation_ids["Month"] = helper.get_month_relation_id(now)
+    relation_ids["Week"] = helper.get_week_relation_id(now)
+    relation_ids["All"] = helper.get_relation_id("All", helper.all_database_id, "https://www.notion.so/icons/site-selection_gray.svg")
 
     properties = {}
-    properties["Name"] = utils.get_title(today_str)
-    properties["Date"] = utils.get_date(now.to_date_string())
-    properties["年"] = utils.get_relation([relation_ids["年"]])
-    properties["月"] = utils.get_relation([relation_ids["月"]])
-    properties["周"] = utils.get_relation([relation_ids["周"]])
-    properties["全部"] = utils.get_relation([relation_ids["全部"]])
+    properties["Year"] = utils.get_relation([relation_ids["Year"]])
+    properties["Month"] = utils.get_relation([relation_ids["Month"]])
+    properties["Week"] = utils.get_relation([relation_ids["Week"]])
+    properties["All"] = utils.get_relation([relation_ids["All"]])
     # 初始化Word Count为 0
     properties["Word Count"] = utils.get_number(0)
 
