@@ -121,7 +121,7 @@ class NotionHelper:
         week = date.isocalendar().week
         week = f"{year}年第{week}周"
         start, end = get_first_and_last_day_of_week(date)
-        properties = {"日期": get_date(format_date(start), format_date(end))}
+        properties = {"Date": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
             week, self.week_database_id, TARGET_ICON_URL, properties
         )
@@ -129,7 +129,7 @@ class NotionHelper:
     def get_month_relation_id(self, date):
         month = date.strftime("%Y年%-m月")
         start, end = get_first_and_last_day_of_month(date)
-        properties = {"日期": get_date(format_date(start), format_date(end))}
+        properties = {"Date": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
             month, self.month_database_id, TARGET_ICON_URL, properties
         )
@@ -137,7 +137,7 @@ class NotionHelper:
     def get_year_relation_id(self, date):
         year = date.strftime("%Y")
         start, end = get_first_and_last_day_of_year(date)
-        properties = {"日期": get_date(format_date(start), format_date(end))}
+        properties = {"Date": get_date(format_date(start), format_date(end))}
         return self.get_relation_id(
             year, self.year_database_id, TARGET_ICON_URL, properties
         )
@@ -146,7 +146,7 @@ class NotionHelper:
         new_date = date.replace(hour=0, minute=0, second=0, microsecond=0)
         day = new_date.strftime("%Y-%m-%d")
         properties = {
-            "日期": get_date(format_date(date)),
+            "Date": get_date(format_date(date)),
         }
         properties["年"] = get_relation(
             [
