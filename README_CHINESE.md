@@ -42,7 +42,7 @@
 ### 1. 准备 Notion 数据库
 
 你需要一个包含以下层级的 Life OS 系统（建议直接复制模板）：
-
+[https://perinchiang.notion.site/Log-Template-2e028fdf389a8012897fc0b905805fcc](https://perinchiang.notion.site/Log-Template-2e028fdf389a8012897fc0b905805fcc)
 - **Day (日)**
 - **Week (周)**
 - **Month (月)**
