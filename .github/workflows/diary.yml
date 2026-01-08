@@ -13,9 +13,9 @@ jobs:
     name: Create Daily Page
     runs-on: ubuntu-latest
     env:
+        # 只需要这两个核心变量，用户看着就不头晕了
         NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         NOTION_PAGE: ${{ secrets.NOTION_PAGE }}
-        # 不需要 JWT, USER_NAME 等多邻国参数了
     steps:
       - name: Checkout
         uses: actions/checkout@v3
