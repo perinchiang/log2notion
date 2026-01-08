@@ -4,7 +4,7 @@ from notion_helper import NotionHelper
 import utils
 from config import RELATION, TITLE, DATE
 
-# 动态图标
+# 动态图标 (这个很棒，建议保留作为卖点)
 DIARY_ICON = "https://api.wolai.com/v1/icon?type=1&locale=cn&pro=0&color=red&method=f1"
 
 def get_text_from_blocks(blocks):
@@ -18,10 +18,8 @@ def get_text_from_blocks(blocks):
             for rt in rich_texts:
                 text_content += rt.get("plain_text", "")
         
-        # 如果有子块（比如缩进的内容），虽然 Notion API 限制两层，但尽量尝试
+        # 简单处理子块
         if block.get("has_children"):
-            # 注意：Github Action 运行时间有限，且 Notion API 读取子块较慢
-            # 这里为了速度，暂时只读取第一层内容的Word Count，通常足够了
             pass
             
     return text_content
@@ -39,7 +37,6 @@ def update_word_count(page_id):
         count = len(clean_text)
         
         # 更新到 Notion
-        # 请确保你的 Notion 数据库里有一个叫 "Word Count" 的 Number 属性
         properties = {
             "Word Count": utils.get_number(count) 
         }
@@ -54,7 +51,7 @@ def create_daily_log():
     today_str = now.to_date_string()
     print(f"开始处理日期: {today_str}")
 
-    # 检查页面是否存在
+    # 1. 检查页面是否存在
     day_filter = {"property": "Name", "title": {"equals": today_str}}
     response = helper.query(database_id=helper.day_database_id, filter=day_filter)
     
@@ -62,11 +59,11 @@ def create_daily_log():
         print(f"页面 {today_str} 已存在。")
         page_id = response.get("results")[0].get("id")
         
-        # 【新功能】如果页面存在，说明可能是晚上运行，尝试更新Word Count
+        # 如果页面存在，说明可能是晚上运行，尝试更新Word Count
         update_word_count(page_id)
         return
 
-    # 下面是创建页面的逻辑 (早上运行)
+    # 2. 如果页面不存在，则创建新页面 (早上运行逻辑)
     relation_ids = {}
     relation_ids["Year"] = helper.get_year_relation_id(now)
     relation_ids["Month"] = helper.get_month_relation_id(now)
@@ -86,9 +83,7 @@ def create_daily_log():
     parent = {"database_id": helper.day_database_id, "type": "database_id"}
     new_page = helper.create_page(parent=parent, properties=properties, icon=utils.get_icon(DIARY_ICON))
     
-    page_id = new_page.get("id")
-    print(f"成功创建日记页面: {today_str}")
-
+    print(f"✅ 成功创建日记页面: {today_str}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
